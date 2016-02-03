@@ -13,7 +13,7 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.validation.constraints.NotNull;
 
-import be.nabu.eai.repository.artifacts.keystore.DefinedKeyStore;
+import be.nabu.eai.module.keystore.KeyStoreArtifact;
 import be.nabu.libs.services.api.ExecutionContext;
 import be.nabu.utils.io.IOUtils;
 import be.nabu.utils.mime.api.ContentPart;
@@ -130,7 +130,7 @@ public class Services {
 		if (certificateAliases == null || certificateAliases.isEmpty()) {
 			throw new NullPointerException("You must provide aliases for the certificates you want to include");
 		}
-		DefinedKeyStore keystore = executionContext.getServiceContext().getResolver(DefinedKeyStore.class).resolve(keystoreId);
+		KeyStoreArtifact keystore = executionContext.getServiceContext().getResolver(KeyStoreArtifact.class).resolve(keystoreId);
 		if (keystore == null) {
 			throw new IllegalArgumentException("Invalid keystore id: " + keystoreId);
 		}
@@ -159,7 +159,7 @@ public class Services {
 		if (signatureType == null) {
 			signatureType = SignatureType.SHA512WITHRSA;
 		}
-		DefinedKeyStore keystore = executionContext.getServiceContext().getResolver(DefinedKeyStore.class).resolve(keystoreId);
+		KeyStoreArtifact keystore = executionContext.getServiceContext().getResolver(KeyStoreArtifact.class).resolve(keystoreId);
 		if (keystore == null) {
 			throw new IllegalArgumentException("Invalid keystore id: " + keystoreId);
 		}
