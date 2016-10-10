@@ -3,64 +3,39 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nabu</groupId>
 	<artifactId>eai-module-mime</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>${nabu-eai-module-mime-version}</version>
 	<name>eai-module-mime</name>
 	<url>http://nabu.be</url>
+
+	<parent>
+		<groupId>be.nabu</groupId>
+		<artifactId>core</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
 
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<version>2.3.7</version>
-				<extensions>true</extensions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 
-	<licenses>
-		<license>
-			<name>LGPL 3.0 License</name>
-			<url>http://www.gnu.org/licenses/lgpl.html</url>
-		</license>
-	</licenses>
-
 	<dependencies>
 		<dependency>
 			<groupId>be.nabu.eai</groupId>
 			<artifactId>eai-repository</artifactId>
-			<version>1.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>nabu</groupId>
 			<artifactId>eai-module-keystore</artifactId>
-			<version>1.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
-
-	<distributionManagement>
-		<repository>
-			<uniqueVersion>false</uniqueVersion>
-			<id>nabu</id>
-			<name>Nabu Maven Repository</name>
-			<url>http://localhost:5555/maven</url>
-			<layout>default</layout>
-		</repository>
-	</distributionManagement>
 </project>
