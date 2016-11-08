@@ -7,6 +7,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.jws.WebParam;
 import javax.jws.WebResult;
@@ -14,7 +15,10 @@ import javax.jws.WebService;
 import javax.validation.constraints.NotNull;
 
 import be.nabu.eai.module.keystore.KeyStoreArtifact;
+import be.nabu.libs.http.core.HTTPUtils;
 import be.nabu.libs.services.api.ExecutionContext;
+import be.nabu.libs.types.api.KeyValuePair;
+import be.nabu.libs.types.utils.KeyValuePairImpl;
 import be.nabu.utils.io.IOUtils;
 import be.nabu.utils.mime.api.ContentPart;
 import be.nabu.utils.mime.api.Header;
@@ -42,6 +46,41 @@ public class Services {
 		}
 		Header[] result = MimeUtils.getHeaders(name, headers.toArray(new Header[headers.size()]));
 		return result == null ? null : new ArrayList<Header>(Arrays.asList(result));
+	}
+	
+	@WebResult(name = "cookies")
+	public List<KeyValuePair> getCookies(@WebParam(name = "headers") List<Header> headers) {
+		List<KeyValuePair> result = new ArrayList<KeyValuePair>();
+		if (headers != null) {
+			Map<String, List<String>> cookies = HTTPUtils.getCookies(headers.toArray(new Header[headers.size()]));
+			for (String key : cookies.keySet()) {
+				if (cookies.get(key).size() > 0) {
+					result.add(new KeyValuePairImpl(key, cookies.get(key).get(0)));
+				}
+			}
+		}
+		return result;
+	}
+	
+	@WebResult(name = "userAgent")
+	public String getUserAgent(@WebParam(name = "headers") List<Header> headers) {
+		if (headers == null) {
+			return null;
+		}
+		Header header = MimeUtils.getHeader("User-Agent", headers.toArray(new Header[headers.size()]));
+		if (header == null) {
+			return null;
+		}
+		else {
+			StringBuilder builder = new StringBuilder();
+			builder.append(header.getValue());
+			if (header.getComments() != null) {
+				for (String comment : header.getComments()) {
+					builder.append("; " + comment);
+				}
+			}
+			return builder.toString();
+		}
 	}
 	
 	@WebResult(name = "result")
