@@ -19,6 +19,7 @@ import be.nabu.libs.http.core.HTTPUtils;
 import be.nabu.libs.services.api.ExecutionContext;
 import be.nabu.libs.types.api.KeyValuePair;
 import be.nabu.libs.types.utils.KeyValuePairImpl;
+import be.nabu.utils.io.ContentTypeMap;
 import be.nabu.utils.io.IOUtils;
 import be.nabu.utils.mime.api.ContentPart;
 import be.nabu.utils.mime.api.Header;
@@ -60,6 +61,21 @@ public class Services {
 			}
 		}
 		return result;
+	}
+	
+	@WebResult(name = "value")
+	public String getFullHeaderValue(@WebParam(name = "header") Header header) {
+		return MimeUtils.getFullHeaderValue(header);
+	}
+	
+	@WebResult(name = "mimeTypes")
+	public List<String> getMimeTypes(@WebParam(name = "name") String name) {
+		return new ArrayList<String>(ContentTypeMap.getInstance().getAllContentTypesFor(name));
+	}
+	
+	@WebResult(name = "extensions")
+	public List<String> getExtensions(@WebParam(name = "contentType") String contentType) {
+		return new ArrayList<String>(ContentTypeMap.getInstance().getAllExtensionsFor(contentType));
 	}
 	
 	@WebResult(name = "userAgent")
