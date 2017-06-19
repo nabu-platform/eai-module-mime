@@ -21,6 +21,8 @@ import be.nabu.libs.types.api.KeyValuePair;
 import be.nabu.libs.types.utils.KeyValuePairImpl;
 import be.nabu.utils.io.ContentTypeMap;
 import be.nabu.utils.io.IOUtils;
+import be.nabu.utils.io.api.ByteBuffer;
+import be.nabu.utils.io.api.ReadableContainer;
 import be.nabu.utils.mime.api.ContentPart;
 import be.nabu.utils.mime.api.Header;
 import be.nabu.utils.mime.api.ModifiablePart;
@@ -111,7 +113,13 @@ public class Services {
 	
 	@WebResult(name = "content")
 	public InputStream getContent(@WebParam(name = "part") Part part) throws IOException {
-		return part instanceof ContentPart ? IOUtils.toInputStream(((ContentPart) part).getReadable()) : null;
+		if (part instanceof ContentPart) {
+			ReadableContainer<ByteBuffer> readable = ((ContentPart) part).getReadable();
+			if (readable != null) {
+				return IOUtils.toInputStream(readable);
+			}
+		}
+		return null;
 	}
 	
 	@WebResult(name = "parts")
