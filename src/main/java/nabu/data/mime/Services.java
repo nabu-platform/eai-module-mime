@@ -158,8 +158,11 @@ public class Services {
 	}
 	
 	@WebResult(name = "stream")
-	public InputStream format(@NotNull @WebParam(name = "part") Part part, @WebParam(name = "allowBinary") Boolean allowBinary, @WebParam(name = "chunkSize") Integer chunkSize) throws IOException, FormatException {
+	public InputStream format(@NotNull @WebParam(name = "part") Part part, @WebParam(name = "allowBinary") Boolean allowBinary, @WebParam(name = "chunkSize") Integer chunkSize, @WebParam(name = "quoteBoundary") Boolean quoteBoundary) throws IOException, FormatException {
 		PullableMimeFormatter mimeFormatter = new PullableMimeFormatter();
+		if (quoteBoundary != null) {
+			mimeFormatter.setQuoteBoundary(quoteBoundary);
+		}
 		mimeFormatter.setAllowBinary(allowBinary == null || allowBinary);
 		if (chunkSize != null) {
 			mimeFormatter.setChunkSize(chunkSize);
