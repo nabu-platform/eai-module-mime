@@ -140,6 +140,41 @@ public class Services {
 	}
 	
 	@WebResult(name = "part")
+	public Part newByteContentPart(@WebParam(name = "content") @NotNull byte [] content, @WebParam(name = "headers") List<Header> headers) {
+		ModifiablePart part = new PlainMimeContentPart(null, IOUtils.wrap(content, true));
+		((PlainMimeContentPart) part).setReopenable(true);
+		if (headers != null && !headers.isEmpty()) {
+			part.setHeader(headers.toArray(new Header[headers.size()]));
+		}
+		part.removeHeader("Content-Length");
+		part.setHeader(new MimeHeader("Content-Length", Integer.toString(content.length)));
+		return part;
+	}
+	
+	public void setHeader(@NotNull @WebParam(name = "part") Part part, @WebParam(name = "headers") List<Header> headers) {
+		if (headers != null && !headers.isEmpty()) {
+			((ModifiablePart) part).setHeader(headers.toArray(new Header[0]));
+		}
+	}
+	
+	public void removeHeader(@NotNull @WebParam(name = "part") Part part, @WebParam(name = "names") List<String> names) {
+		if (names != null && !names.isEmpty()) {
+			((ModifiablePart) part).removeHeader(names.toArray(new String[0]));
+		}
+	}
+	
+	@WebResult(name = "headers")
+	public List<Header> getHeader(@NotNull @WebParam(name = "part") Part part, @WebParam(name = "names") List<String> names) {
+		List<Header> headers = new ArrayList<Header>();
+		if (names != null && !names.isEmpty()) {
+			for (String name : names) {
+				headers.addAll(Arrays.asList(MimeUtils.getHeaders(name, part.getHeaders())));
+			}
+		}
+		return headers;
+	}
+	
+	@WebResult(name = "part")
 	public Part newContentPart(@WebParam(name = "content") @NotNull InputStream content, @WebParam(name = "headers") List<Header> headers) {
 		ModifiablePart part = new PlainMimeContentPart(null, IOUtils.wrap(content));
 		if (headers != null && !headers.isEmpty()) {
