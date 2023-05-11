@@ -67,7 +67,7 @@ public class Services {
 	
 	@WebResult(name = "value")
 	public String getFullHeaderValue(@WebParam(name = "header") Header header) {
-		return MimeUtils.getFullHeaderValue(header);
+		return header == null ? null : MimeUtils.getFullHeaderValue(header);
 	}
 	
 	@WebResult(name = "mimeTypes")
