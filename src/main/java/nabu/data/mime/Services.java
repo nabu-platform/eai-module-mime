@@ -45,6 +45,7 @@ import be.nabu.utils.mime.api.Header;
 import be.nabu.utils.mime.api.ModifiablePart;
 import be.nabu.utils.mime.api.MultiPart;
 import be.nabu.utils.mime.api.Part;
+import be.nabu.utils.mime.api.RelocatablePart;
 import be.nabu.utils.mime.impl.FormatException;
 import be.nabu.utils.mime.impl.MimeHeader;
 import be.nabu.utils.mime.impl.MimeUtils;
@@ -231,6 +232,10 @@ public class Services {
 		}
 		if (parts != null && !parts.isEmpty()) {
 			for (Part child : parts) {
+				// make sure the child parts are correctly connected, otherwise formatting may suffer!
+				if (child instanceof RelocatablePart) {
+					((RelocatablePart) child).setParent(part);
+				}
 				part.addChild(child);
 			}
 		}
